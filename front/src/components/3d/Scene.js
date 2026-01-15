@@ -46,7 +46,7 @@ export default function Scene() {
                     <Magasin scale={1.4} position={[0.30, 0, 3]}/>
                     <Neon position={[-6.3, 5, 1]} rotation={[Math.PI / 2, 0, -Math.PI / 2]}/>
                     <TshirtCustom customColor={colorTshirt} sizeTshirt={sizeTshirt} />
-                    <Environment preset="city" environmentIntensity={0.3} />
+                    <Environment preset="city" environmentIntensity={0.2} />
                 </Suspense>
 
                 <OrbitControls makeDefault target={[1, 3.5, 0]} enabled={controlsEnabled}/>
