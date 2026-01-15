@@ -10,38 +10,30 @@ function Blog() {
             // 1. Appel à l'API Symfony pour récupérer tous les articles
             const response = await fetch('/api/articles', {
                 headers: {
-                    'Accept': 'application/ld+json'
+                    'Accept': 'application/ld+json',
+                    'Cache-Control': 'no-cache'
                 }
             });
             
             if (!response.ok) {
+                console.error("HTTP Error:", response.status, response.statusText);
                 throw new Error('Erreur lors de la récupération des articles');
             }
             
             const data = await response.json();
-            let articles = data['hydra:member'] || [];
-
-            // 2. Vérification de la connexion utilisateur
-            const token = localStorage.getItem('token');
-            if (token) {
-                try {
-                    // Décryptage du token pour obtenir l'ID de l'utilisateur
-                    const payload = JSON.parse(atob(token.split('.')[1]));
-                    
-                    if (payload.id) {
-                        const userIri = `/api/users/${payload.id}`;
-                        
-                        // 3. Filtrage côté client : On ne garde que MES articles
-                        articles = articles.filter(post => {
-                            // L'auteur peut être un objet ou une chaîne (IRI)
-                            const authorRef = post.author && post.author['@id'] ? post.author['@id'] : post.author;
-                            return authorRef === userIri;
-                        });
-                    }
-                } catch (e) {
-                    console.error("Erreur lecture token", e);
-                }
+            console.log("API Data received:", data); // <--- DEBUG LOG
+            
+            // Support both Hydra (JSON-LD) and standard JSON array
+            let articles = [];
+            if (data['hydra:member']) {
+                articles = data['hydra:member'];
+            } else if (data['member']) { 
+                articles = data['member'];
+            } else if (Array.isArray(data)) {
+                articles = data;
             }
+            
+            console.log("Parsed articles:", articles); // <--- DEBUG LOG
 
             setPosts(articles);
         } catch (error) {
@@ -56,18 +48,25 @@ function Blog() {
 
   return (
     <div className="page-container">
-      <h1>{localStorage.getItem('token') ? 'Mes Articles' : 'Tous les Articles'}</h1>
+      <h1>Derniers Articles</h1>
       {loading ? (
         <p>Chargement des articles...</p>
       ) : (
         <div className="blog-grid">
           {posts.length > 0 ? (
-              posts.map(post => (
-                <article key={post['@id'] || post.id} className="blog-card">
-                  <h3>{post.title}</h3>
-                  <p>{post.summary || 'Pas de résumé disponible.'}</p>
-                </article>
-              ))
+              posts.map((post, index) => {
+                // Debugging individual post fields
+                console.log(`Article ${index}:`, post);
+                
+                return (
+                  <article key={post['@id'] || post.id || index} className="blog-card">
+                    <h3>{post.title || post.Title || 'Sans titre'}</h3>
+                    <p>
+                        {post.summary || post.Summary || post.content || post.Content || 'Pas de contenu.'}
+                    </p>
+                  </article>
+                );
+              })
           ) : (
               <p>Aucun article trouvé.</p>
           )}
