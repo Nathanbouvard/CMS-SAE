@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Blog() {
   const [posts, setPosts] = useState([]);
@@ -15,15 +16,8 @@ function Blog() {
                 }
             });
             
-            if (!response.ok) {
-                console.error("HTTP Error:", response.status, response.statusText);
-                throw new Error('Erreur lors de la récupération des articles');
-            }
-            
             const data = await response.json();
-            console.log("API Data received:", data); // <--- DEBUG LOG
             
-            // Support both Hydra (JSON-LD) and standard JSON array
             let articles = [];
             if (data['hydra:member']) {
                 articles = data['hydra:member'];
@@ -32,8 +26,6 @@ function Blog() {
             } else if (Array.isArray(data)) {
                 articles = data;
             }
-            
-            console.log("Parsed articles:", articles); // <--- DEBUG LOG
 
             setPosts(articles);
         } catch (error) {
@@ -55,15 +47,25 @@ function Blog() {
         <div className="blog-grid">
           {posts.length > 0 ? (
               posts.map((post, index) => {
-                // Debugging individual post fields
-                console.log(`Article ${index}:`, post);
-                
+                const articleId = post.id || (post['@id'] ? post['@id'].split('/').pop() : null);
+
                 return (
                   <article key={post['@id'] || post.id || index} className="blog-card">
-                    <h3>{post.title || post.Title || 'Sans titre'}</h3>
-                    <p>
-                        {post.summary || post.Summary || post.content || post.Content || 'Pas de contenu.'}
-                    </p>
+                    {articleId ? (
+                        <Link to={`/blog/${articleId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                            <h3>{post.title || post.Title || 'Sans titre'}</h3>
+                            <p>
+                                {post.summary || post.Summary || post.content || post.Content || 'Pas de contenu.'}
+                            </p>
+                        </Link>
+                    ) : (
+                        <>
+                            <h3>{post.title || post.Title || 'Sans titre'}</h3>
+                            <p>
+                                {post.summary || post.Summary || post.content || post.Content || 'Pas de contenu.'}
+                            </p>
+                        </>
+                    )}
                   </article>
                 );
               })
