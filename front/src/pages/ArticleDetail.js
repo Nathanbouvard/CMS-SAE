@@ -14,29 +14,14 @@ function ArticleDetail() {
         
         const data = await res.json();
 
-        // 1. Charger les blocs s'ils sont des IRIs
-        let blocks = data.blocks || [];
-        if (blocks.length > 0 && typeof blocks[0] === 'string') {
-          blocks = await Promise.all(
-            blocks.map(iri => fetch(iri, { headers: { 'Accept': 'application/ld+json' } }).then(r => r.json()))
-          );
+        // Avec les groupes de sérialisation, les blocs sont déjà inclus.
+        // Il suffit de les trier par position.
+        if (data.blocks && Array.isArray(data.blocks)) {
+          data.blocks.sort((a, b) => a.position - b.position);
         }
-
-        // 2. Charger les médias dans les blocs s'ils sont des IRIs
-        blocks = await Promise.all(blocks.map(async (block) => {
-            if (block.media && typeof block.media === 'string') {
-                try {
-                    const mediaRes = await fetch(block.media, { headers: { 'Accept': 'application/ld+json' } });
-                    block.media = await mediaRes.json();
-                } catch (e) {
-                    console.error("Erreur chargement media", e);
-                }
-            }
-            return block;
-        }));
-
-        data.blocks = blocks.sort((a, b) => a.position - b.position);
+        
         setArticle(data);
+
       } catch (err) {
         console.error(err);
       } finally {
@@ -62,20 +47,22 @@ function ArticleDetail() {
         
         {article.blocks?.map((block, idx) => (
             <div key={block.id || idx} className={`block block-${block.type}`}>
-                {block.content && <div dangerouslySetInnerHTML={{ __html: block.content }} />}
                 
+                {block.type === 'text' && block.content && <div dangerouslySetInnerHTML={{ __html: block.content.replace(/\n/g, '<br />') }} />}
+                {block.type === 'title' && block.content && <h2>{block.content}</h2>}
+
                 {block.media && block.media.filename && (
-                    <div className="block-media" style={{ marginTop: '15px' }}>
+                    <div className="block-media" style={{ marginTop: '15px', textAlign: 'center' }}>
                         {isImage(block.media.filename) ? (
                             <img 
-                                src={`/uploads/media/${block.media.filename}`} 
+                                src={`/uploads/media/${block.media.filename}`}
                                 alt={block.media.altText || ''}
                                 style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
                             />
                         ) : (
                             <a 
-                                href={`/uploads/media/${block.media.filename}`} 
-                                target="_blank" 
+                                href={`/uploads/media/${block.media.filename}`}
+                                target="_blank"
                                 rel="noreferrer"
                                 style={{ display: 'inline-block', padding: '10px 15px', backgroundColor: '#444', color: 'white', textDecoration: 'none', borderRadius: '4px' }}
                             >
