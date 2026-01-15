@@ -79,7 +79,7 @@ const RightMenu = ({ currentColor, onColorChange, currentSize, onSizeChange, act
           <button style={buttonStyle('#ff0000')} onClick={() => onColorChange('#ff0000')}>Rouge</button>
           <button style={buttonStyle('#0000ff')} onClick={() => onColorChange('#0000ff')}>Bleu</button>
           <button style={buttonStyle('#00ff00')} onClick={() => onColorChange('#00ff00')}>Vert</button>
-          <button style={buttonStyle('#000000')} onClick={() =buttonStyle> onColorChange('#000000')}>Noir</button>
+          <button style={buttonStyle('#000000')} onClick={() => onColorChange('#000000')}>Noir</button>
         </div>
       </div>
 

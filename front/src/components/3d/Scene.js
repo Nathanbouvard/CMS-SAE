@@ -6,6 +6,7 @@ import {Model as Neon} from './components/Neon'
 import TshirtCustom from './TshirtController/TshirtCustom1'
 import RightMenu from './components/RightMenu1'
 import Collision from './components/Collision'
+import LightMag from './components/LightMag'
 import CameraCollider from './components/CameraCollider'
 
 export default function Scene() {
@@ -36,23 +37,16 @@ export default function Scene() {
             <RightMenu setColor={setColor} setSize={setSize} />
             <Canvas camera={{position: [5, 5, 5], fov: 50}}>
                 <CameraCollider />
-                <ambientLight intensity={0.5}/>
+                <ambientLight intensity={0.2}/>
                 <directionalLight position={[10, 10, 5]} intensity={0.5}/>
 
                 <Suspense fallback={null}>
                     <Collision/>
+                    <LightMag/>
                     <Magasin scale={1.4} position={[0.30, 0, 3]}/>
                     <Neon position={[-6.3, 5, 1]} rotation={[Math.PI / 2, 0, -Math.PI / 2]}/>
-                    {/*<TshirtCustom*/}
-                    {/*    position={[0, 1.5, 0]}*/}
-                    {/*    brushColor={brushColor}*/}
-                    {/*    size={tshirtSize}*/}
-                    {/*    setControlsEnabled={setControlsEnabled}*/}
-                    {/*    activeSticker={activeSticker}*/}
-                    {/*    stickerSize={stickerSize}*/}
-                    {/*/>*/}
                     <TshirtCustom customColor={colorTshirt} sizeTshirt={sizeTshirt} />
-                    {/*<Environment preset="city"/>*/}
+                    <Environment preset="city" environmentIntensity={0.3} />
                 </Suspense>
 
                 <OrbitControls makeDefault target={[1, 3.5, 0]} enabled={controlsEnabled}/>
