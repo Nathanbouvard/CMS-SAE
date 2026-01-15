@@ -34,7 +34,6 @@ function Navbar() {
       <ul className="navbar-nav">
         <li><Link to="/">Accueil</Link></li>
         <li><Link to="/blog">Blog</Link></li>
-        <li><Link to="/custom">Customisation</Link></li>
         {isAdmin && (
             <li><a href={`http://localhost:8000/connect-admin?token=${localStorage.getItem('token')}`} className="nav-link admin-link">Administration</a></li>
         )}
