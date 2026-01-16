@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ThemeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ThemeRepository::class)]
 #[ApiResource]
