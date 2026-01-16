@@ -34,6 +34,20 @@ function ArticleDetail() {
 
   const isImage = (filename) => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(filename);
 
+  const getImageStyle = (size) => {
+    let maxWidth = '60%'; // medium par défaut
+    if (size === 'small') maxWidth = '30%';
+    if (size === 'large') maxWidth = '100%';
+    
+    return { 
+      maxWidth, 
+      height: 'auto', 
+      borderRadius: '8px',
+      margin: '0 auto', // Centrer l'image
+      display: 'block'
+    };
+  };
+
   if (loading) return <div className="page-container"><p>Chargement...</p></div>;
   if (!article) return <div className="page-container"><p>Article introuvable.</p><Link to="/blog">Retour</Link></div>;
 
@@ -57,7 +71,7 @@ function ArticleDetail() {
                             <img 
                                 src={`/uploads/media/${block.media.filename}`}
                                 alt={block.media.altText || ''}
-                                style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+                                style={getImageStyle(article.theme?.imageSize)}
                             />
                         ) : (
                             <a 
