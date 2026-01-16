@@ -40,7 +40,7 @@ function Blog() {
 
   return (
     <div className="page-container">
-      <h1>Derniers Articles</h1>
+      <h1>Articles</h1>
       {loading ? (
         <p>Chargement des articles...</p>
       ) : (
