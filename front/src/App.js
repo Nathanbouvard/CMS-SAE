@@ -5,7 +5,6 @@ import Home from './pages/Home';
 import Blog from './pages/Blog';
 import ArticleDetail from './pages/ArticleDetail';
 import Login from './pages/Login';
-import Custom from './pages/Custom';
 import './App.css';
 
 function App() {
@@ -18,7 +17,6 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<ArticleDetail />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/custom" element={<Custom />} />
         </Routes>
       </div>
     </Router>
