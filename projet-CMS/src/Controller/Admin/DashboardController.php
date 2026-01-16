@@ -7,6 +7,7 @@ use App\Entity\Block;
 use App\Entity\DataColumn;
 use App\Entity\Dataset;
 use App\Entity\Media;
+use App\Entity\Rating;
 use App\Entity\Theme;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;

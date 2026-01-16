@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Rating;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -64,9 +65,14 @@ class Article
     #[Groups(['article:read'])]
     private Collection $blocks;
 
+    #[ORM\OneToMany(mappedBy: 'article', targetEntity: Rating::class, orphanRemoval: true)]
+    #[Groups(['article:read'])]
+    private Collection $ratings;
+
     public function __construct()
     {
         $this->blocks = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -130,6 +136,15 @@ class Article
             }
         }
         return $this;
+    }
+
+    // --- GETTER POUR LES AVIS ---
+    /**
+     * @return Collection<int, Rating>
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
     }
 
     public function __toString(): string

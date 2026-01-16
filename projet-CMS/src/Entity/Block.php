@@ -48,8 +48,12 @@ class Block
     #[Groups(['article:read', 'block:read', 'block:write'])]
     private ?array $vizConfig = null;
 
+    #[ORM\OneToMany(mappedBy: 'block', targetEntity: Rating::class, cascade: ['remove'])]
+    private Collection $ratings;
+
     public function __construct()
     {
+        $this->ratings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,6 +124,35 @@ class Block
     public function setVizConfig(?array $vizConfig): static
     {
         $this->vizConfig = $vizConfig;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rating>
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): static
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings->add($rating);
+            $rating->setBlock($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): static
+    {
+        if ($this->ratings->removeElement($rating)) {
+            if ($rating->getBlock() === $this) {
+                $rating->setBlock(null);
+            }
+        }
+
         return $this;
     }
 }
