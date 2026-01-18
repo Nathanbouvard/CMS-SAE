@@ -75,8 +75,8 @@
             canvases.forEach(canvas => {
                 let config;
                 try { config = JSON.parse(canvas.dataset.config); } catch (e) { return; }
-                if (!config || !config.dataset_id) return;
-                fetch(`/api/dataset/${config.dataset_id}`)
+                if (!config || !config.media_id) return;
+                fetch(`/api/media/${config.media_id}/data`)
                     .then(res => res.json())
                     .then(data => {
                         const labels = data.map(row => row[config.axe_x]);
