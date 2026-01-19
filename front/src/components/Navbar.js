@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 function Navbar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const Logo = "/stickers/logo.svg";
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -12,7 +13,7 @@ function Navbar() {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         const allowedRoles = ['ROLE_ADMIN', 'ROLE_AUTHOR', 'ROLE_EDITOR', 'ROLE_DESIGNER', 'ROLE_PROVIDER'];
-        
+
         if (payload.roles && payload.roles.some(role => allowedRoles.includes(role))) {
           setIsAdmin(true);
         }
@@ -30,7 +31,10 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">STAK</div>
+        <div className="navbar-brand" style={{display: 'flex', alignItems: 'center'}}>
+            <img src={Logo} style={{width: '50px', height: '50px'}}/>
+            <div>Soul N Leaf</div>
+        </div>
       <ul className="navbar-nav">
         <li><Link to="/">Accueil</Link></li>
         <li><Link to="/blog">Blog</Link></li>
