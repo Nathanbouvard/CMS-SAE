@@ -1,6 +1,12 @@
 import React from 'react';
 
+
 const RightMenu1 = ({setColor, setSize}) => {
+
+    const stickerLogo = "/stickers/logo.svg";
+    const stickerHeart = "/stickers/heart.svg" ;
+    const stickerStar = "/stickers/star.svg";
+
     const menuStyle = {
         position: 'absolute',
         top: '20px',
@@ -24,6 +30,14 @@ const RightMenu1 = ({setColor, setSize}) => {
         transition: 'all 0.2s',
     });
 
+    const btnStick = {
+        padding: '0',
+        backgroundColor: '#ffffff',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        transition: 'all 0.2s',
+    };
+
 
     return (
         <div style={menuStyle}>
@@ -34,11 +48,11 @@ const RightMenu1 = ({setColor, setSize}) => {
                 <p style={{color: 'black'}}>Couleur du t-shirt</p>
                 <div style={{display: 'flex', gap: '5px', flexWrap: 'wrap'}}>
                     <button style={btnStyle('#ffffff')} onClick={() => setColor('#ffffff')}>Blanc</button>
-                    <button style={btnStyle('#52b6ff')}  onClick={() => setColor('#52b6ff')}>Bleu</button>
-                    <button style={btnStyle('#ff3b4d')}  onClick={() => setColor('#ff3b4d')}>Rouge</button>
-                    <button style={btnStyle('#98ff72')}  onClick={() => setColor('#98ff72')}>Vert</button>
-                    <button style={btnStyle('#ffad5a')}  onClick={() => setColor('#ffad5a')}>Orange</button>
-                    <button style={btnStyle('#ff5fe5')}  onClick={() => setColor('#ff5fe5')}>Rose</button>
+                    <button style={btnStyle('#52b6ff')} onClick={() => setColor('#52b6ff')}>Bleu</button>
+                    <button style={btnStyle('#ff3b4d')} onClick={() => setColor('#ff3b4d')}>Rouge</button>
+                    <button style={btnStyle('#98ff72')} onClick={() => setColor('#98ff72')}>Vert</button>
+                    <button style={btnStyle('#ffad5a')} onClick={() => setColor('#ffad5a')}>Orange</button>
+                    <button style={btnStyle('#ff5fe5')} onClick={() => setColor('#ff5fe5')}>Rose</button>
                 </div>
             </div>
 
@@ -47,11 +61,30 @@ const RightMenu1 = ({setColor, setSize}) => {
                 <p style={{color: 'black'}}>Taille</p>
                 <div style={{display: 'flex', gap: '5px', flexWrap: 'wrap'}}>
                     <button style={btnStyle('#ffffff')} onClick={() => setSize(4.8)}>S</button>
-                    <button style={btnStyle('#ffffff')}  onClick={() => setSize(5)}>M</button>
-                    <button style={btnStyle('#ffffff')}  onClick={() => setSize(5.5)}>L</button>
+                    <button style={btnStyle('#ffffff')} onClick={() => setSize(5)}>M</button>
+                    <button style={btnStyle('#ffffff')} onClick={() => setSize(5.5)}>L</button>
+                    <button style={btnStyle('#ffffff')} onClick={() => setSize(6)}>XL</button>
                 </div>
             </div>
 
+            {/*Stickers*/}
+            <div>
+                <p style={{color: 'black'}}>Stickers</p>
+                <div style={{display: 'flex', gap: '5px', flexWrap: 'wrap'}}>
+                    <button style={btnStick} onClick={() => setSize(4.8)}><img src={stickerLogo} style={{
+                        width: '50px',
+                        height: '50px',
+                    }}/></button>
+                    <button style={btnStick} onClick={() => setSize(4.8)}><img src={stickerHeart} style={{
+                        width: '50px',
+                        height: '50px',
+                    }}/></button>
+                    <button style={btnStick} onClick={() => setSize(4.8)}><img src={stickerStar} style={{
+                        width: '50px',
+                        height: '50px',
+                    }}/></button>
+                </div>
+            </div>
         </div>
     );
 };
