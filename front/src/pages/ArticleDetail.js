@@ -95,4 +95,11 @@ function ArticleDetail() {
 
       {article.createdAt && (
         <div className="article-meta">
-          <p>Publié le : {new Date(article.createdAt).toLocaleDate-red/src/components/VizBlock.js.
+                    <p>Publié le : {new Date(article.createdAt).toLocaleDateString()}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default ArticleDetail;
