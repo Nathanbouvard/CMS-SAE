@@ -22,6 +22,9 @@
             }
             .article-preview h1, .article-preview h2 { color: var(--theme-primary); }
             .preview-viz { border-top: 4px solid var(--theme-primary); }
+            .image-small { max-height: 200px; }
+            .image-medium { max-height: 400px; }
+            .image-large { max-height: 600px; }
         </style>
 
         {# HEADER #}
@@ -47,8 +50,7 @@
                         {% elseif block.type == 'image' and block.media %}
                             <div class="text-center my-4">
                                 <img src="{{ asset('uploads/media/' ~ block.media.filename) }}" 
-                                     class="img-fluid rounded shadow" 
-                                     style="max-height: 400px;"
+                                     class="img-fluid rounded shadow image-{{ theme.imageSize|default('medium') }}" 
                                      alt="{{ block.media.altText|default('Image de l\'article') }}">
                             </div>
                         {% endif %}
