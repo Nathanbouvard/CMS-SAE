@@ -11,7 +11,7 @@ const RightMenu1 = ({setColor, setSize}) => {
         position: 'absolute',
         top: '20px',
         right: '20px',
-        width: '250px',
+        width: '275px',
         backgroundColor: 'rgba(255, 255, 255, 0.9)',
         padding: '20px',
         borderRadius: '10px',
