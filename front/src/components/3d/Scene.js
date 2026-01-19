@@ -1,6 +1,6 @@
 import React, {Suspense, useState} from 'react'
 import {Canvas} from '@react-three/fiber'
-import {OrbitControls, Environment} from '@react-three/drei'
+import {OrbitControls, Environment, Loader} from '@react-three/drei'
 import {Model as Magasin} from './components/Magasin1'
 import {Model as Neon} from './components/Neon'
 import TshirtCustom from './TshirtController/TshirtCustom1'
@@ -51,6 +51,14 @@ export default function Scene() {
 
                 <OrbitControls makeDefault target={[1, 3.5, 0]} enabled={controlsEnabled}/>
             </Canvas>
+
+            <Loader
+                containerStyles={{ background: 'rgba(0,0,0,0.9)' }} // Style du fond
+                innerStyles={{ backgroundColor: 'white' }} // Couleur de la barre (ex: Rose néon)
+                barStyles={{ height: '20px' }} // Épaisseur de la barre
+                dataStyles={{ color: 'white', fontSize: '1.2rem' }} // Style du texte %
+                dataInterpolation={(p) => `Chargement du magasin : ${p.toFixed(0)}%`}
+            />
         </div>
     )
 }
