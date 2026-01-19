@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import VizBlock from '../components/VizBlock';
 
 function ArticleDetail() {
   const { id } = useParams();
@@ -64,6 +65,7 @@ function ArticleDetail() {
                 
                 {block.type === 'text' && block.content && <div dangerouslySetInnerHTML={{ __html: block.content.replace(/\n/g, '<br />') }} />}
                 {block.type === 'title' && block.content && <h2>{block.content}</h2>}
+                {block.type === 'viz' && <VizBlock block={block} />}
 
                 {block.media && block.media.filename && (
                     <div className="block-media" style={{ marginTop: '15px', textAlign: 'center' }}>
@@ -93,11 +95,4 @@ function ArticleDetail() {
 
       {article.createdAt && (
         <div className="article-meta">
-          <p>Publié le : {new Date(article.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default ArticleDetail;
+          <p>Publié le : {new Date(article.createdAt).toLocaleDate-red/src/components/VizBlock.js.
