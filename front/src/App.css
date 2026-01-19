@@ -11,8 +11,8 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  background-color: #F8F8F6;
+  color: black;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -26,14 +26,14 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: var(--nav-bg);
+  background-color: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--primary-color);
+  color: #082c03;
 }
 
 .navbar-nav {
@@ -50,13 +50,13 @@ body {
 
 .navbar-nav a {
   text-decoration: none;
-  color: var(--text-color);
+  color: black;
   font-weight: 500;
   transition: color 0.3s;
 }
 
 .navbar-nav a:hover {
-  color: var(--primary-color);
+  color: #082c03;
 }
 
 .btn-login {
@@ -112,7 +112,7 @@ body {
 }
 
 .back-link:hover {
-    color: var(--primary-color);
+    color: #082c03;
 }
 
 .article-content {
@@ -178,4 +178,17 @@ body {
   font-weight: bold;
   font-size: 1rem;
   margin-top: 10px;
+}
+
+/* Home hover effect pour les texte Impactant*/
+.home-strong {
+  display: inline-block;
+  transition: all 0.4s ease;
+  cursor: default;
+  margin: 0 25px;
+}
+
+.home-strong:hover {
+  transform: scale(1.25);
+  filter: brightness(1.2);
 }
