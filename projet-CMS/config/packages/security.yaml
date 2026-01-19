@@ -82,6 +82,8 @@ security:
         - { path: ^/admin/datacolumn, roles: ROLE_PROVIDER }
         - { path: ^/admin/block, roles: ROLE_EDITOR }
         - { path: ^/admin/article, roles: ROLE_AUTHOR }
+        - { path: ^/admin/theme, roles: ROLE_DESIGNER }
+        - { path: ^/admin/media, roles: ROLE_DESIGNER }
         - { path: ^/admin, roles: ROLE_USER }
         
         # La page de profil pour les abonnés
