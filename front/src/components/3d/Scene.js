@@ -53,10 +53,10 @@ export default function Scene() {
             </Canvas>
 
             <Loader
-                containerStyles={{ background: 'rgba(0,0,0,0.9)' }} // Style du fond
-                innerStyles={{ backgroundColor: 'white' }} // Couleur de la barre (ex: Rose néon)
-                barStyles={{ height: '20px' }} // Épaisseur de la barre
-                dataStyles={{ color: 'white', fontSize: '1.2rem' }} // Style du texte %
+                containerStyles={{ background: 'rgba(0,0,0,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}
+                innerStyles={{ backgroundColor: '#333333' , height: '5px', width: '100%', borderRadius: '5px' }}
+                barStyles={{ height: '5px', width: '100%', borderRadius: '5px' }}
+                dataStyles={{ color: 'white', fontSize: '1.2rem' }}
                 dataInterpolation={(p) => `Chargement du magasin : ${p.toFixed(0)}%`}
             />
         </div>
