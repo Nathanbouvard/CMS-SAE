@@ -42,7 +42,7 @@ function ArticleDetail() {
     
     return { 
       maxWidth, 
-      height: 'auto', 
+      'block-size': 'auto', 
       borderRadius: '8px',
       margin: '0 auto', // Centrer l'image
       display: 'block'
@@ -95,7 +95,7 @@ function ArticleDetail() {
 
       {article.createdAt && (
         <div className="article-meta">
-                    <p>Publié le : {new Date(article.createdAt).toLocaleDateString()}</p>
+                    <p>Publié le : {new Date(article.createdAt).toLocaleDateString('fr-FR')}</p>
         </div>
       )}
     </div>
