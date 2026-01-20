@@ -7,6 +7,16 @@ function Blog() {
 
   const isImage = (filename) => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(filename);
 
+  // Helper to render star ratings
+  const renderStars = (rating) => {
+    const rounded = Math.round(rating);
+    return (
+      <span style={{ color: '#f39c12' }}>
+        {'★'.repeat(rounded)}{'☆'.repeat(5 - rounded)}
+      </span>
+    );
+  };
+
   useEffect(() => {
     const fetchArticles = async () => {
         try {
@@ -29,8 +39,7 @@ function Blog() {
                 articles = data;
             }
 
-            // L'API de liste ne renvoie pas forcément les blocks. On récupère les détails pour chaque article
-            // afin d'avoir accès aux images contenues dans les blocks.
+            // L'API de liste ne renvoie pas forcément les blocks ni les ratings. On récupère les détails pour chaque article.
             const detailedArticles = await Promise.all(articles.map(async (article) => {
                 try {
                     const articleId = article.id || (article['@id'] ? article['@id'].split('/').pop() : null);
@@ -63,7 +72,7 @@ function Blog() {
 
   return (
     <div className="page-container">
-      <h1>Articles</h1>
+      <h1>Actualités de la marque</h1>
       {loading ? (
         <p>Chargement des articles...</p>
       ) : (
@@ -82,36 +91,48 @@ function Blog() {
                     }
                 }
 
+                // Calcul de la note moyenne
+                const ratings = post.ratings || [];
+                const avgRating = ratings.length > 0
+                    ? ratings.reduce((acc, r) => acc + (r.rating || 0), 0) / ratings.length
+                    : 0;
+
+                const CardContent = () => (
+                    <div className="blog-card-inner">
+                        {coverImage && (
+                            <div className="blog-card-image-wrapper">
+                                <img 
+                                    src={`/uploads/media/${coverImage}`} 
+                                    alt={post.title || 'Article cover'}
+                                    className="blog-card-image"
+                                />
+                            </div>
+                        )}
+                        <div className="blog-card-info">
+                            <h3>{post.title || post.Title || 'Sans titre'}</h3>
+                            
+                            {ratings.length > 0 && (
+                                <div className="blog-card-rating">
+                                    {renderStars(avgRating)} 
+                                    <small style={{ color: '#666', marginLeft: '5px' }}>({ratings.length})</small>
+                                </div>
+                            )}
+
+                            <p className="blog-card-summary">
+                                {post.summary || post.Summary || post.content || post.Content || 'Pas de contenu.'}
+                            </p>
+                        </div>
+                    </div>
+                );
+
                 return (
                   <article key={post['@id'] || post.id || index} className="blog-card">
                     {articleId ? (
                         <Link to={`/blog/${articleId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                            {coverImage && (
-                                <img 
-                                    src={`/uploads/media/${coverImage}`} 
-                                    alt={post.title || 'Article cover'}
-                                    style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '4px', marginBottom: '10px' }}
-                                />
-                            )}
-                            <h3>{post.title || post.Title || 'Sans titre'}</h3>
-                            <p>
-                                {post.summary || post.Summary || post.content || post.Content || 'Pas de contenu.'}
-                            </p>
+                            <CardContent />
                         </Link>
                     ) : (
-                        <>
-                            {coverImage && (
-                                <img 
-                                    src={`/uploads/media/${coverImage}`} 
-                                    alt={post.title || 'Article cover'}
-                                    style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '4px', marginBottom: '10px' }}
-                                />
-                            )}
-                            <h3>{post.title || post.Title || 'Sans titre'}</h3>
-                            <p>
-                                {post.summary || post.Summary || post.content || post.Content || 'Pas de contenu.'}
-                            </p>
-                        </>
+                        <CardContent />
                     )}
                   </article>
                 );
