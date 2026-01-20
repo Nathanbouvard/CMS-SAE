@@ -87,7 +87,7 @@ body {
 }
 
 .blog-card {
-  background-color: var(--card-bg);
+  background-color: white;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -111,21 +111,18 @@ body {
 .back-link {
     display: inline-block;
     margin-bottom: 20px;
-    color: var(--text-color);
+    color: black;
     text-decoration: none;
     font-weight: bold;
 }
 
-.back-link:hover {
-    color: #082c03;
-}
-
 .article-content {
-    background-color: var(--card-bg);
+    background-color: white;
     padding: 30px;
     border-radius: 8px;
     margin-top: 20px;
     line-height: 1.6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .article-summary {
@@ -144,7 +141,7 @@ body {
 .block {
     margin-bottom: 20px;
 }
-
+white
 /* Form */
 .login-form {
   background-color: white;
