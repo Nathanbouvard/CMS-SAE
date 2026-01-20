@@ -1,144 +1,89 @@
-import React, { useRef, useState, useEffect } from 'react'
-import { useGLTF } from '@react-three/drei'
+import React, {useRef, useState, useEffect} from 'react'
+import {useGLTF, Decal} from '@react-three/drei'
 import * as THREE from 'three'
-import { useThree } from '@react-three/fiber'
 
-export default function TshirtCustom({ brushColor, size = 'M', setControlsEnabled, activeSticker, stickerSize = 150, ...props }) {
-  const { nodes } = useGLTF('/models/tshirt.glb')
-  const meshRef = useRef()
-  const [texture, setTexture] = useState(null)
-  const canvasRef = useRef(document.createElement('canvas'))
-  const [isDrawing, setIsDrawing] = useState(false)
-  const [lastPos, setLastPos] = useState({ x: 0, y: 0 })
+// Preload textures to avoid white flash (optional but good for cache)
+const stickerPaths = [
+    "/stickers/logo.svg",
+    "/stickers/heart.svg",
+    "/stickers/star.svg"
+];
+// We can keep a simple preload via standard loader if we want, or rely on the effect below.
+const loader = new THREE.TextureLoader();
+stickerPaths.forEach(path => loader.load(path));
 
-  const getScale = () => {
-    switch(size) {
-      case 'S': return 3.4
-      case 'L': return 4.2
-      default: return 3.788 // M
-    }
-  }
+export default function TshirtCustom({customColor, sizeTshirt, stickFront, stickBack, ...props}) {
+    const {nodes} = useGLTF('/models/tshirt.glb')
+    const meshRef = useRef()
 
-  // Initialize canvas and texture
-  useEffect(() => {
-    const canvas = canvasRef.current
-    canvas.width = 1024
-    canvas.height = 1024
-    const ctx = canvas.getContext('2d')
-    
-    // Fill with white background
-    ctx.fillStyle = '#ffffff'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-    
-    const tex = new THREE.CanvasTexture(canvas)
-    tex.flipY = false // GLTF UVs are usually flipped
-    tex.colorSpace = THREE.SRGBColorSpace // Modern color management
-    setTexture(tex)
-  }, [])
+    const [frontTexture, setFrontTexture] = useState(null);
+    const [backTexture, setBackTexture] = useState(null);
 
-  const getCanvasCoordinates = (uv) => {
-    const canvas = canvasRef.current
-    return {
-        x: uv.x * canvas.width,
-        y: uv.y * canvas.height
-    }
-  }
+    // Seamless loading for Front Texture
+    useEffect(() => {
+        new THREE.TextureLoader().load(stickFront, (tex) => {
+            tex.anisotropy = 16;
+            tex.minFilter = THREE.LinearFilter;
+            tex.magFilter = THREE.LinearFilter;
+            tex.needsUpdate = true;
+            setFrontTexture(tex);
+        });
+    }, [stickFront]);
 
-  const draw = (uv) => {
-    if (!uv || !texture) return
-    // Don't draw lines if sticker mode is active
-    if (activeSticker) return
+    // Seamless loading for Back Texture
+    useEffect(() => {
+        new THREE.TextureLoader().load(stickBack, (tex) => {
+            tex.anisotropy = 16;
+            tex.minFilter = THREE.LinearFilter;
+            tex.magFilter = THREE.LinearFilter;
+            tex.needsUpdate = true;
+            setBackTexture(tex);
+        });
+    }, [stickBack]);
 
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
-    const { x, y } = getCanvasCoordinates(uv)
-
-    ctx.beginPath()
-    ctx.strokeStyle = brushColor
-    ctx.lineWidth = 10
-    ctx.lineCap = 'round'
-    ctx.lineJoin = 'round'
-    
-    // If we are starting a new line, start exactly at current point
-    if (lastPos.x === -1) {
-        ctx.moveTo(x, y)
-    } else {
-        ctx.moveTo(lastPos.x, lastPos.y)
-    }
-    
-    ctx.lineTo(x, y)
-    ctx.stroke()
-    
-    setLastPos({ x, y })
-    texture.needsUpdate = true
-  }
-
-  const handlePointerDown = (e) => {
-    e.stopPropagation() 
-    if (setControlsEnabled) setControlsEnabled(false)
-    
-    // Sticker Mode
-    if (activeSticker && e.uv) {
-        const { x, y } = getCanvasCoordinates(e.uv)
-        const canvas = canvasRef.current
-        const ctx = canvas.getContext('2d')
-        
-        const img = new Image()
-        img.src = activeSticker
-        img.onload = () => {
-            // Draw sticker centered on click using stickerSize prop
-            const s = stickerSize 
-            ctx.drawImage(img, x - s/2, y - s/2, s, s)
-            texture.needsUpdate = true
-        }
-        return // Exit, don't start drawing lines
-    }
-
-    setIsDrawing(true)
-    if (e.uv) {
-        const { x, y } = getCanvasCoordinates(e.uv)
-        setLastPos({ x, y }) // Set initial position
-        
-        // Draw a dot immediately
-        const canvas = canvasRef.current
-        const ctx = canvas.getContext('2d')
-        ctx.beginPath()
-        ctx.fillStyle = brushColor
-        ctx.arc(x, y, 5, 0, Math.PI * 2)
-        ctx.fill()
-        texture.needsUpdate = true
-    } else {
-        setLastPos({ x: -1, y: -1 })
-    }
-  }
-
-  const handlePointerMove = (e) => {
-    if (isDrawing && e.uv) {
-      draw(e.uv)
-    }
-  }
-
-  const handlePointerUp = (e) => {
-    if (setControlsEnabled) setControlsEnabled(true)
-    setIsDrawing(false)
-    setLastPos({ x: -1, y: -1 }) // Reset
-  }
-
-  return (
-    <group {...props} dispose={null}>
-      <mesh 
-        ref={meshRef}
-        geometry={nodes['Comfortable_T-Shirt'].geometry} 
-        scale={getScale()}
-        rotation={[0, Math.PI / 2, 0]}
-        position={[1, 1, 0]}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerLeave={handlePointerUp}
-      >
-        {texture && <meshStandardMaterial map={texture} side={THREE.DoubleSide} />}
-      </mesh>
-    </group>
-  )
+    return (<group {...props} dispose={null}>
+        <mesh
+            ref={meshRef}
+            geometry={nodes['Comfortable_T-Shirt'].geometry}
+            scale={sizeTshirt}
+            rotation={[0, Math.PI / 2, 0]}
+            position={[1, 2.5, 0]}
+        >
+            <meshStandardMaterial color={customColor} side={THREE.DoubleSide}/>
+            {/*Logo devant*/}
+            {frontTexture && (
+                <Decal
+                    // debug // Makes "bounding box" of the decal visible
+                    position={[0.06, 0.32, 0.05]} // Position of the decal
+                    rotation={[0, 0, 0]} // Rotation of the decal (can be a vector or a degree in radians)
+                    scale={0.04} // Scale of the decal
+                >
+                    <meshBasicMaterial
+                        map={frontTexture}
+                        polygonOffset
+                        polygonOffsetFactor={-1} // The material should take precedence over the original
+                        transparent
+                        toneMapped={false}
+                    />
+                </Decal>
+            )}
+            {/*Logo dans le dos*/}
+            {backTexture && (
+                <Decal
+                    // debug // Makes "bounding box" of the decal visible
+                    position={[0, 0.29, -0.12]} // Position of the decal
+                    rotation={[0, Math.PI / 1, 0]} // Rotation of the decal (can be a vector or a degree in radians)
+                    scale={0.15} // Scale of the decal
+                >
+                    <meshBasicMaterial
+                        map={backTexture}
+                        polygonOffset
+                        polygonOffsetFactor={-1} // The material should take precedence over the original
+                        transparent
+                        toneMapped={false}
+                    />
+                </Decal>
+            )}
+        </mesh>
+    </group>)
 }
