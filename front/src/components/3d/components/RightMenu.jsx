@@ -1,132 +1,111 @@
 import React from 'react';
 
-const RightMenu = ({ currentColor, onColorChange, currentSize, onSizeChange, activeSticker, onStickerSelect, stickerSize, onStickerSizeChange }) => {
-  // SVG Data URIs for stickers
-  const stickerStar = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iZ29sZCI+PHBhdGggZD0iTTEyIDJsMy4wOSA2LjI2TDIyIDkuMjdsLTUgNC44NyAxLjE4IDYuODhMMTIgMTcuNzdsLTYuMTggMy4yNUw3IDE0LjE0IDIgOS4yN2w2LjkxLTEuMDFMMTIgMnoiLz48L3N2Zz4=";
-  const stickerHeart = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0icmVkIj48cGF0aCBkPSJNMTIgMjEuMzVsLTEuNDUtMS4zMkM1LjQgMTUuMzYgMiAxMi4yOCAyIDguNSAyIDUuNDIgNC40MiAzIDcuNSAzYzEuNzQgMCAzLjQxLjgxIDQuNSAyLjA5QzEzLjA5IDMuODEgMTQuNzYgMyAxNi41IDMgMTkuNTggMyAyMiA1LjQyIDIyIDguNWMwIDMuNzgtMy40IDYuODYtOC41NSAxMS41NEwxMiAyMS4zNXoiLz48L3N2Zz4=";
-  const stickerLogo = "/stickers/logo.svg";
 
-  const menuStyle = {
-    position: 'absolute',
-    top: '20px',
-    right: '20px',
-    width: '250px',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    padding: '20px',
-    borderRadius: '10px',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-    zIndex: 1000,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
-    maxHeight: '90vh',
-    overflowY: 'auto'
-  };
+const RightMenu = ({setColor, setSize, setStickerFront, setStickerBack}) => {
 
-  const buttonStyle = (color) => ({
-    padding: '10px 15px',
-    backgroundColor: color,
-    color: color === '#ffffff' ? '#333' : 'white',
-    border: (currentColor === color && !activeSticker) ? '3px solid #333' : '1px solid #ccc',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-    transition: 'all 0.2s',
-  });
+    const stickerLogo = "/stickers/logo.svg";
+    const stickerHeart = "/stickers/heart.svg" ;
+    const stickerStar = "/stickers/star.svg";
 
-  const stickerBtnStyle = (src) => ({
-    width: '50px',
-    height: '50px',
-    padding: '5px',
-    backgroundColor: 'white',
-    border: activeSticker === src ? '3px solid #333' : '1px solid #ccc',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden'
-  });
 
-  const sizeButtonStyle = (size) => ({
-    padding: '10px 15px',
-    backgroundColor: currentSize === size ? '#333' : '#eee',
-    color: currentSize === size ? 'white' : '#333',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-    transition: 'all 0.2s',
-  });
+    const menuStyle = {
+        position: 'absolute',
+        top: '20px',
+        right: '20px',
+        width: '275px',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        padding: '20px',
+        borderRadius: '10px',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+        zIndex: 1000,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '15px',
+    };
 
-  const basicButtonStyle = {
-    padding: '10px 15px',
-    backgroundColor: '#333',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-  };
+    const btnStyle = (color) => ({
+        padding: '10px 15px',
+        backgroundColor: color,
+        borderRadius: '5px',
+        cursor: 'pointer',
+        transition: 'all 0.2s',
+    });
 
-  return (
-    <div style={menuStyle}>
-      <h2 style={{ margin: '0 0 10px 0', fontSize: '1.2rem', color: '#333' }}>Personnalisation</h2>
-      
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-        <label style={{ fontSize: '0.9rem', color: '#666' }}>Outils (Couleur)</label>
-        <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
-          <button style={buttonStyle('#ff0000')} onClick={() => onColorChange('#ff0000')}>Rouge</button>
-          <button style={buttonStyle('#0000ff')} onClick={() => onColorChange('#0000ff')}>Bleu</button>
-          <button style={buttonStyle('#00ff00')} onClick={() => onColorChange('#00ff00')}>Vert</button>
-          <button style={buttonStyle('#000000')} onClick={() => onColorChange('#000000')}>Noir</button>
+    const btnStick = {
+        padding: '0',
+        backgroundColor: '#ffffff',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        transition: 'all 0.2s',
+    };
+
+
+    return (
+        <div style={menuStyle}>
+            <h2 style={{margin: '0 0 5px 0', fontSize: '1.2rem', color: '#333'}}>Costomisation</h2>
+
+            {/*Couleurs*/}
+            <div>
+                <p style={{color: 'black'}}>Couleur du t-shirt</p>
+                <div style={{display: 'flex', gap: '5px', flexWrap: 'wrap'}}>
+                    <button style={btnStyle('#ffffff')} onClick={() => setColor('#ffffff')}>Blanc</button>
+                    <button style={btnStyle('#52b6ff')} onClick={() => setColor('#52b6ff')}>Bleu</button>
+                    <button style={btnStyle('#ff3b4d')} onClick={() => setColor('#ff3b4d')}>Rouge</button>
+                    <button style={btnStyle('#98ff72')} onClick={() => setColor('#98ff72')}>Vert</button>
+                    <button style={btnStyle('#ffad5a')} onClick={() => setColor('#ffad5a')}>Orange</button>
+                    <button style={btnStyle('#ff5fe5')} onClick={() => setColor('#ff5fe5')}>Rose</button>
+                </div>
+            </div>
+
+            {/*Size*/}
+            <div>
+                <p style={{color: 'black'}}>Taille</p>
+                <div style={{display: 'flex', gap: '5px', flexWrap: 'wrap'}}>
+                    <button style={btnStyle('#ffffff')} onClick={() => setSize(4.8)}>S</button>
+                    <button style={btnStyle('#ffffff')} onClick={() => setSize(5)}>M</button>
+                    <button style={btnStyle('#ffffff')} onClick={() => setSize(5.5)}>L</button>
+                    <button style={btnStyle('#ffffff')} onClick={() => setSize(6)}>XL</button>
+                </div>
+            </div>
+
+            {/*Stickers devant*/}
+            <div>
+                <p style={{color: 'black'}}>Logo devant</p>
+                <div style={{display: 'flex', gap: '5px', flexWrap: 'wrap'}}>
+                    <button style={btnStick} onClick={() => {setStickerFront(stickerLogo)}}><img src={stickerLogo} alt="Logo" style={{
+                        width: '50px',
+                        height: '50px',
+                    }}/></button>
+                    <button style={btnStick} onClick={() => {setStickerFront(stickerHeart)}}><img src={stickerHeart} alt="Heart" style={{
+                        width: '50px',
+                        height: '50px',
+                    }}/></button>
+                    <button style={btnStick} onClick={() => {setStickerFront(stickerStar)}}><img src={stickerStar} alt="Star" style={{
+                        width: '50px',
+                        height: '50px',
+                    }}/></button>
+                </div>
+            </div>
+            {/*Stickers dos*/}
+            <div>
+                <p style={{color: 'black'}}>Logo dans le dos</p>
+                <div style={{display: 'flex', gap: '5px', flexWrap: 'wrap'}}>
+                    <button style={btnStick} onClick={() => {setStickerBack(stickerLogo)}}><img src={stickerLogo} alt="Logo" style={{
+                        width: '50px',
+                        height: '50px',
+                    }}/></button>
+                    <button style={btnStick} onClick={() => {setStickerBack(stickerHeart)}}><img src={stickerHeart} alt="Heart" style={{
+                        width: '50px',
+                        height: '50px',
+                    }}/></button>
+                    <button style={btnStick} onClick={() => {setStickerBack(stickerStar)}}><img src={stickerStar} alt="Star" style={{
+                        width: '50px',
+                        height: '50px',
+                    }}/></button>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-        <label style={{ fontSize: '0.9rem', color: '#666' }}>Stickers</label>
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <div style={stickerBtnStyle(stickerStar)} onClick={() => onStickerSelect(stickerStar)}>
-             <img src={stickerStar} alt="Star" style={{ width: '100%', height: '100%' }} />
-          </div>
-          <div style={stickerBtnStyle(stickerHeart)} onClick={() => onStickerSelect(stickerHeart)}>
-             <img src={stickerHeart} alt="Heart" style={{ width: '100%', height: '100%' }} />
-          </div>
-          <div style={stickerBtnStyle(stickerLogo)} onClick={() => onStickerSelect(stickerLogo)}>
-             <img src={stickerLogo} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-          </div>
-        </div>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-        <label style={{ fontSize: '0.9rem', color: '#666' }}>Taille du sticker ({stickerSize}px)</label>
-        <input 
-          type="range" 
-          min="50" 
-          max="400" 
-          value={stickerSize} 
-          onChange={(e) => onStickerSizeChange(parseInt(e.target.value))}
-          style={{ cursor: 'pointer' }}
-        />
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-        <label style={{ fontSize: '0.9rem', color: '#666' }}>Taille T-shirt</label>
-        <div style={{ display: 'flex', gap: '5px' }}>
-          <button style={sizeButtonStyle('S')} onClick={() => onSizeChange('S')}>S</button>
-          <button style={sizeButtonStyle('M')} onClick={() => onSizeChange('M')}>M</button>
-          <button style={sizeButtonStyle('L')} onClick={() => onSizeChange('L')}>L</button>
-        </div>
-      </div>
-      
-      <button 
-        style={{ ...basicButtonStyle, backgroundColor: '#e74c3c', marginTop: '10px' }}
-        onClick={() => window.location.reload()}
-      >
-        Réinitialiser
-      </button>
-    </div>
-  );
+    );
 };
 
 export default RightMenu;
