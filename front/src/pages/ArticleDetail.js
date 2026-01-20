@@ -90,10 +90,20 @@ function ArticleDetail() {
   if (loading) return <div className="page-container"><p>Chargement...</p></div>;
   if (!article) return <div className="page-container"><p>Article introuvable.</p><Link to="/blog">Retour</Link></div>;
 
+  const themeStyle = {
+    color: article.theme?.textColor || 'inherit',
+    fontFamily: article.theme?.fontFamily || 'inherit',
+    fontSize: article.theme?.fontSize || 'inherit',
+  };
+
+  const titleStyle = {
+    color: article.theme?.titleColor || 'inherit',
+  };
+
   return (
-    <div className="page-container article-detail">
+    <div className="page-container article-detail" style={themeStyle}>
       <Link to="/blog" className="back-link">← Retour</Link>
-      <h1>{article.title}</h1>
+      <h1 style={titleStyle}>{article.title}</h1>
       
       <div className="article-content">
         {article.summary && <p className="article-summary"><em>{article.summary}</em></p>}
@@ -102,10 +112,10 @@ function ArticleDetail() {
             <div key={block.id || idx} className={`block block-${block.type}`}>
                 
                 {block.type === 'text' && block.content && <div dangerouslySetInnerHTML={{ __html: block.content.replace(/\n/g, '<br />') }} />}
-                {block.type === 'title' && block.content && <h2>{block.content}</h2>}
-                {block.type === 'chart' && <VizBlock block={block} />}
+                {block.type === 'title' && block.content && <h2 style={titleStyle}>{block.content}</h2>}
+                {block.type === 'chart' && <VizBlock block={block} theme={article.theme} />}
 
-                {block.media && block.media.filename && (
+                {block.media && block.media.filename && block.type !== 'chart' && (
                     <div className="block-media" style={{ marginTop: '15px', textAlign: 'center' }}>
                         {isImage(block.media.filename) ? (
                             <img 
