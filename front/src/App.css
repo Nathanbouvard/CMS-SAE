@@ -28,6 +28,11 @@ body {
   padding: 1rem 2rem;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 .navbar-brand {
@@ -60,7 +65,7 @@ body {
 }
 
 .btn-login {
-  background-color: var(--primary-color);
+  background-color: #A7CC72;
   color: #000 !important;
   padding: 8px 16px;
   border-radius: 4px;
@@ -68,8 +73,8 @@ body {
 
 /* Layout */
 .page-container {
-  padding: 2rem;
-  max-width: 1200px;
+  padding: 7rem 2rem;
+  max-width: 1500px;
   margin: 0 auto;
 }
 
@@ -95,12 +100,12 @@ body {
 
 .blog-card h3 {
   margin-top: 0;
-  color: var(--primary-color);
+  color: #082c03;
 }
 
 /* Article Detail */
 .article-detail h1 {
-    color: var(--primary-color);
+    color: #082c03;
 }
 
 .back-link {
@@ -142,11 +147,12 @@ body {
 
 /* Form */
 .login-form {
-  background-color: var(--card-bg);
+  background-color: white;
   padding: 30px;
   border-radius: 8px;
   max-width: 400px;
   margin: 0 auto;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .form-group {
@@ -171,7 +177,7 @@ body {
 .btn-submit {
   width: 100%;
   padding: 10px;
-  background-color: var(--primary-color);
+  background-color: #A7CC72;
   border: none;
   border-radius: 4px;
   cursor: pointer;
