@@ -7,31 +7,69 @@ function ArticleDetail() {
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchArticle = async () => {
-      try {
-        const res = await fetch(`/api/articles/${id}`, { headers: { 'Accept': 'application/ld+json' } });
-        if (!res.ok) throw new Error('Article introuvable');
-        
-        const data = await res.json();
+  // State pour le formulaire d'avis
+  const [newReview, setNewReview] = useState({ pseudo: '', rating: 5, message: '' });
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
-        // Avec les groupes de sérialisation, les blocs sont déjà inclus.
-        // Il suffit de les trier par position.
-        if (data.blocks && Array.isArray(data.blocks)) {
-          data.blocks.sort((a, b) => a.position - b.position);
-        }
-        
-        setArticle(data);
+  const fetchArticle = async () => {
+    try {
+      const res = await fetch(`/api/articles/${id}`, { headers: { 'Accept': 'application/ld+json' } });
+      if (!res.ok) throw new Error('Article introuvable');
+      
+      const data = await res.json();
 
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+      if (data.blocks && Array.isArray(data.blocks)) {
+        data.blocks.sort((a, b) => a.position - b.position);
       }
-    };
+      
+      setArticle(data);
 
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchArticle();
   }, [id]);
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const res = await fetch('/api/ratings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/ld+json',
+          'Accept': 'application/ld+json'
+        },
+        body: JSON.stringify({
+          pseudo: newReview.pseudo,
+          rating: parseInt(newReview.rating),
+          message: newReview.message,
+          article: `/api/articles/${id}`
+        })
+      });
+
+      if (!res.ok) {
+        throw new Error('Erreur lors de l\'envoi de l\'avis');
+      }
+
+      // Réinitialiser le formulaire et recharger l'article
+      setNewReview({ pseudo: '', rating: 5, message: '' });
+      await fetchArticle();
+
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const isImage = (filename) => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(filename);
 
@@ -65,7 +103,7 @@ function ArticleDetail() {
                 
                 {block.type === 'text' && block.content && <div dangerouslySetInnerHTML={{ __html: block.content.replace(/\n/g, '<br />') }} />}
                 {block.type === 'title' && block.content && <h2>{block.content}</h2>}
-                {block.type === 'viz' && <VizBlock block={block} />}
+                {block.type === 'chart' && <VizBlock block={block} />}
 
                 {block.media && block.media.filename && (
                     <div className="block-media" style={{ marginTop: '15px', textAlign: 'center' }}>
@@ -98,6 +136,75 @@ function ArticleDetail() {
                     <p>Publié le : {new Date(article.createdAt).toLocaleDateString('fr-FR')}</p>
         </div>
       )}
+
+      <div className="article-reviews" style={{ marginTop: '40px', borderTop: '1px solid #ccc', paddingTop: '20px' }}>
+        <h3>Avis ({article.ratings ? article.ratings.length : 0})</h3>
+
+        {/* Formulaire d'ajout d'avis */}
+        <div className="add-review-form" style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}>
+          <h4>Laisser un avis</h4>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          <form onSubmit={handleReviewSubmit}>
+            <div style={{ marginBottom: '10px' }}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>Pseudo :</label>
+              <input
+                type="text"
+                required
+                value={newReview.pseudo}
+                onChange={(e) => setNewReview({ ...newReview, pseudo: e.target.value })}
+                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+              />
+            </div>
+            <div style={{ marginBottom: '10px' }}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>Note :</label>
+              <select
+                value={newReview.rating}
+                onChange={(e) => setNewReview({ ...newReview, rating: e.target.value })}
+                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+              >
+                <option value="5">5 étoiles</option>
+                <option value="4">4 étoiles</option>
+                <option value="3">3 étoiles</option>
+                <option value="2">2 étoiles</option>
+                <option value="1">1 étoile</option>
+              </select>
+            </div>
+            <div style={{ marginBottom: '10px' }}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>Message :</label>
+              <textarea
+                value={newReview.message}
+                onChange={(e) => setNewReview({ ...newReview, message: e.target.value })}
+                rows="3"
+                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+              />
+            </div>
+            <button 
+              type="submit" 
+              disabled={submitting}
+              style={{ padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+            >
+              {submitting ? 'Envoi...' : 'Envoyer'}
+            </button>
+          </form>
+        </div>
+
+        {article.ratings && article.ratings.length > 0 ? (
+          <div className="reviews-list">
+            {article.ratings.map((rating, idx) => (
+              <div key={rating.id || idx} className="review-item" style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '5px', border: '1px solid #eee' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
+                  <strong>{rating.pseudo || 'Anonyme'}</strong>
+                  <span style={{ color: '#f39c12' }}>{'★'.repeat(rating.rating || 0)}{'☆'.repeat(5 - (rating.rating || 0))}</span>
+                </div>
+                {rating.message && <p style={{ margin: '5px 0' }}>{rating.message}</p>}
+                {rating.createdAt && <small style={{ color: '#888' }}>Le {new Date(rating.createdAt).toLocaleDateString('fr-FR')}</small>}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>Aucun avis pour cet article.</p>
+        )}
+      </div>
     </div>
   );
 }
