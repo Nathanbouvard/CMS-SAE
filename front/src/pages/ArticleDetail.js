@@ -8,7 +8,7 @@ function ArticleDetail() {
   const [loading, setLoading] = useState(true);
 
   // State pour le formulaire d'avis
-  const [newReview, setNewReview] = useState({ pseudo: '', rating: 5, message: '' });
+  const [newReview, setNewReview] = useState({ pseudo: '', rating: 5 });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -51,7 +51,6 @@ function ArticleDetail() {
         body: JSON.stringify({
           pseudo: newReview.pseudo,
           rating: parseInt(newReview.rating),
-          message: newReview.message,
           article: `/api/articles/${id}`
         })
       });
@@ -61,7 +60,7 @@ function ArticleDetail() {
       }
 
       // Réinitialiser le formulaire et recharger l'article
-      setNewReview({ pseudo: '', rating: 5, message: '' });
+      setNewReview({ pseudo: '', rating: 5 });
       await fetchArticle();
 
     } catch (err) {
@@ -98,6 +97,28 @@ function ArticleDetail() {
 
   const titleStyle = {
     color: article.theme?.titleColor || 'inherit',
+  };
+
+  // Helper pour les étoiles interactives
+  const renderInteractiveStars = () => {
+    return (
+      <div style={{ display: 'flex', cursor: 'pointer' }}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <svg
+            key={star}
+            onClick={() => setNewReview({ ...newReview, rating: star })}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill={star <= newReview.rating ? '#f39c12' : '#ccc'}
+            width="24px"
+            height="24px"
+            style={{ marginRight: '5px' }}
+          >
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+          </svg>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -148,11 +169,28 @@ function ArticleDetail() {
       )}
 
       <div className="article-reviews" style={{ marginTop: '40px', borderTop: '1px solid #ccc', paddingTop: '20px' }}>
-        <h3>Avis ({article.ratings ? article.ratings.length : 0})</h3>
+        <h3>Note moyenne</h3>
+
+        {/* Affichage de la moyenne */}
+        {article.ratings && article.ratings.length > 0 ? (
+          <div className="average-rating" style={{ marginBottom: '30px', textAlign: 'center' }}>
+            <span style={{ fontSize: '3em', fontWeight: 'bold', color: '#f39c12' }}>
+              {(article.ratings.reduce((acc, r) => acc + (r.rating || 0), 0) / article.ratings.length).toFixed(1)}
+            </span>
+            <span style={{ fontSize: '1.5em', color: '#ccc' }}> / 5</span>
+            <div style={{ color: '#f39c12', fontSize: '1.5em' }}>
+              {'★'.repeat(Math.round(article.ratings.reduce((acc, r) => acc + (r.rating || 0), 0) / article.ratings.length))}
+              {'☆'.repeat(5 - Math.round(article.ratings.reduce((acc, r) => acc + (r.rating || 0), 0) / article.ratings.length))}
+            </div>
+            <p className="text-muted">Basé sur {article.ratings.length} avis</p>
+          </div>
+        ) : (
+          <p>Aucun avis pour le moment.</p>
+        )}
 
         {/* Formulaire d'ajout d'avis */}
         <div className="add-review-form" style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}>
-          <h4>Laisser un avis</h4>
+          <h4>Laisser une note</h4>
           {error && <p style={{ color: 'red' }}>{error}</p>}
           <form onSubmit={handleReviewSubmit}>
             <div style={{ marginBottom: '10px' }}>
@@ -167,53 +205,17 @@ function ArticleDetail() {
             </div>
             <div style={{ marginBottom: '10px' }}>
               <label style={{ display: 'block', marginBottom: '5px' }}>Note :</label>
-              <select
-                value={newReview.rating}
-                onChange={(e) => setNewReview({ ...newReview, rating: e.target.value })}
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-              >
-                <option value="5">5 étoiles</option>
-                <option value="4">4 étoiles</option>
-                <option value="3">3 étoiles</option>
-                <option value="2">2 étoiles</option>
-                <option value="1">1 étoile</option>
-              </select>
-            </div>
-            <div style={{ marginBottom: '10px' }}>
-              <label style={{ display: 'block', marginBottom: '5px' }}>Message :</label>
-              <textarea
-                value={newReview.message}
-                onChange={(e) => setNewReview({ ...newReview, message: e.target.value })}
-                rows="3"
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-              />
+              {renderInteractiveStars()}
             </div>
             <button 
               type="submit" 
               disabled={submitting}
-              style={{ padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+              style={{ padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px' }}
             >
               {submitting ? 'Envoi...' : 'Envoyer'}
             </button>
           </form>
         </div>
-
-        {article.ratings && article.ratings.length > 0 ? (
-          <div className="reviews-list">
-            {article.ratings.map((rating, idx) => (
-              <div key={rating.id || idx} className="review-item" style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '5px', border: '1px solid #eee' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
-                  <strong>{rating.pseudo || 'Anonyme'}</strong>
-                  <span style={{ color: '#f39c12' }}>{'★'.repeat(rating.rating || 0)}{'☆'.repeat(5 - (rating.rating || 0))}</span>
-                </div>
-                {rating.message && <p style={{ margin: '5px 0' }}>{rating.message}</p>}
-                {rating.createdAt && <small style={{ color: '#888' }}>Le {new Date(rating.createdAt).toLocaleDateString('fr-FR')}</small>}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p>Aucun avis pour cet article.</p>
-        )}
       </div>
     </div>
   );
