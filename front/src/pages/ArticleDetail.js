@@ -169,7 +169,24 @@ function ArticleDetail() {
       )}
 
       <div className="article-reviews" style={{ marginTop: '40px', borderTop: '1px solid #ccc', paddingTop: '20px' }}>
-        <h3>Avis ({article.ratings ? article.ratings.length : 0})</h3>
+        <h3>Note moyenne</h3>
+
+        {/* Affichage de la moyenne */}
+        {article.ratings && article.ratings.length > 0 ? (
+          <div className="average-rating" style={{ marginBottom: '30px', textAlign: 'center' }}>
+            <span style={{ fontSize: '3em', fontWeight: 'bold', color: '#f39c12' }}>
+              {(article.ratings.reduce((acc, r) => acc + (r.rating || 0), 0) / article.ratings.length).toFixed(1)}
+            </span>
+            <span style={{ fontSize: '1.5em', color: '#ccc' }}> / 5</span>
+            <div style={{ color: '#f39c12', fontSize: '1.5em' }}>
+              {'★'.repeat(Math.round(article.ratings.reduce((acc, r) => acc + (r.rating || 0), 0) / article.ratings.length))}
+              {'☆'.repeat(5 - Math.round(article.ratings.reduce((acc, r) => acc + (r.rating || 0), 0) / article.ratings.length))}
+            </div>
+            <p className="text-muted">Basé sur {article.ratings.length} avis</p>
+          </div>
+        ) : (
+          <p>Aucun avis pour le moment.</p>
+        )}
 
         {/* Formulaire d'ajout d'avis */}
         <div className="add-review-form" style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}>
@@ -199,22 +216,6 @@ function ArticleDetail() {
             </button>
           </form>
         </div>
-
-        {article.ratings && article.ratings.length > 0 ? (
-          <div className="reviews-list">
-            {article.ratings.map((rating, idx) => (
-              <div key={rating.id || idx} className="review-item" style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '5px', border: '1px solid #eee' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
-                  <strong>{rating.pseudo || 'Anonyme'}</strong>
-                  <span style={{ color: '#f39c12' }}>{'★'.repeat(rating.rating || 0)}{'☆'.repeat(5 - (rating.rating || 0))}</span>
-                </div>
-                {rating.createdAt && <small style={{ color: '#888' }}>Le {new Date(rating.createdAt).toLocaleDateString('fr-FR')}</small>}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p>Aucun avis pour cet article.</p>
-        )}
       </div>
     </div>
   );
