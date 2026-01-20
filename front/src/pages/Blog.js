@@ -111,16 +111,17 @@ function Blog() {
                         <div className="blog-card-info">
                             <h3>{post.title || post.Title || 'Sans titre'}</h3>
                             
-                            {ratings.length > 0 && (
-                                <div className="blog-card-rating">
-                                    {renderStars(avgRating)} 
-                                    <small style={{ color: '#666', marginLeft: '5px' }}>({ratings.length})</small>
-                                </div>
-                            )}
-
                             <p className="blog-card-summary">
                                 {post.summary || post.Summary || post.content || post.Content || 'Pas de contenu.'}
                             </p>
+
+                            {ratings.length > 0 && (
+                                <div className="blog-card-rating">
+                                    {renderStars(avgRating)} 
+                                    <span style={{ fontWeight: 'bold', marginLeft: '5px', color: '#f39c12' }}>{avgRating.toFixed(1)}</span>
+                                    <small style={{ color: '#666', marginLeft: '5px' }}>({ratings.length})</small>
+                                </div>
+                            )}
                         </div>
                     </div>
                 );

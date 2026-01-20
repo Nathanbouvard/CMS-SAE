@@ -117,6 +117,8 @@ body {
 
 .blog-card-info {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .blog-card-info h3 {
@@ -127,7 +129,8 @@ body {
 }
 
 .blog-card-rating {
-  margin-bottom: 15px;
+  margin-top: auto;
+  align-self: flex-end;
 }
 
 .blog-card-summary {
