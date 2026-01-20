@@ -8,7 +8,7 @@ function ArticleDetail() {
   const [loading, setLoading] = useState(true);
 
   // State pour le formulaire d'avis
-  const [newReview, setNewReview] = useState({ pseudo: '', rating: 5, message: '' });
+  const [newReview, setNewReview] = useState({ pseudo: '', rating: 5 });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -51,7 +51,6 @@ function ArticleDetail() {
         body: JSON.stringify({
           pseudo: newReview.pseudo,
           rating: parseInt(newReview.rating),
-          message: newReview.message,
           article: `/api/articles/${id}`
         })
       });
@@ -61,7 +60,7 @@ function ArticleDetail() {
       }
 
       // Réinitialiser le formulaire et recharger l'article
-      setNewReview({ pseudo: '', rating: 5, message: '' });
+      setNewReview({ pseudo: '', rating: 5 });
       await fetchArticle();
 
     } catch (err) {
@@ -98,6 +97,28 @@ function ArticleDetail() {
 
   const titleStyle = {
     color: article.theme?.titleColor || 'inherit',
+  };
+
+  // Helper pour les étoiles interactives
+  const renderInteractiveStars = () => {
+    return (
+      <div style={{ display: 'flex', cursor: 'pointer' }}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <svg
+            key={star}
+            onClick={() => setNewReview({ ...newReview, rating: star })}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill={star <= newReview.rating ? '#f39c12' : '#ccc'}
+            width="24px"
+            height="24px"
+            style={{ marginRight: '5px' }}
+          >
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+          </svg>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -152,7 +173,7 @@ function ArticleDetail() {
 
         {/* Formulaire d'ajout d'avis */}
         <div className="add-review-form" style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}>
-          <h4>Laisser un avis</h4>
+          <h4>Laisser une note</h4>
           {error && <p style={{ color: 'red' }}>{error}</p>}
           <form onSubmit={handleReviewSubmit}>
             <div style={{ marginBottom: '10px' }}>
@@ -167,31 +188,12 @@ function ArticleDetail() {
             </div>
             <div style={{ marginBottom: '10px' }}>
               <label style={{ display: 'block', marginBottom: '5px' }}>Note :</label>
-              <select
-                value={newReview.rating}
-                onChange={(e) => setNewReview({ ...newReview, rating: e.target.value })}
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-              >
-                <option value="5">5 étoiles</option>
-                <option value="4">4 étoiles</option>
-                <option value="3">3 étoiles</option>
-                <option value="2">2 étoiles</option>
-                <option value="1">1 étoile</option>
-              </select>
-            </div>
-            <div style={{ marginBottom: '10px' }}>
-              <label style={{ display: 'block', marginBottom: '5px' }}>Message :</label>
-              <textarea
-                value={newReview.message}
-                onChange={(e) => setNewReview({ ...newReview, message: e.target.value })}
-                rows="3"
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-              />
+              {renderInteractiveStars()}
             </div>
             <button 
               type="submit" 
               disabled={submitting}
-              style={{ padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+              style={{ padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px' }}
             >
               {submitting ? 'Envoi...' : 'Envoyer'}
             </button>
