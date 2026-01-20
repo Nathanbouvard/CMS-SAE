@@ -208,7 +208,6 @@ function ArticleDetail() {
                   <strong>{rating.pseudo || 'Anonyme'}</strong>
                   <span style={{ color: '#f39c12' }}>{'★'.repeat(rating.rating || 0)}{'☆'.repeat(5 - (rating.rating || 0))}</span>
                 </div>
-                {rating.message && <p style={{ margin: '5px 0' }}>{rating.message}</p>}
                 {rating.createdAt && <small style={{ color: '#888' }}>Le {new Date(rating.createdAt).toLocaleDateString('fr-FR')}</small>}
               </div>
             ))}
