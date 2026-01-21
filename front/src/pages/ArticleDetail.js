@@ -42,11 +42,13 @@ function ArticleDetail() {
     setError(null);
 
     try {
+      const token = localStorage.getItem('token');
       const res = await fetch('/api/ratings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/ld+json',
-          'Accept': 'application/ld+json'
+          'Accept': 'application/ld+json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
         body: JSON.stringify({
           pseudo: newReview.pseudo,
@@ -189,33 +191,42 @@ function ArticleDetail() {
         )}
 
         {/* Formulaire d'ajout d'avis */}
-        <div className="add-review-form" style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}>
-          <h4>Laisser une note</h4>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-          <form onSubmit={handleReviewSubmit}>
-            <div style={{ marginBottom: '10px' }}>
-              <label style={{ display: 'block', marginBottom: '5px' }}>Pseudo :</label>
-              <input
-                type="text"
-                required
-                value={newReview.pseudo}
-                onChange={(e) => setNewReview({ ...newReview, pseudo: e.target.value })}
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-              />
-            </div>
-            <div style={{ marginBottom: '10px' }}>
-              <label style={{ display: 'block', marginBottom: '5px' }}>Note :</label>
-              {renderInteractiveStars()}
-            </div>
-            <button 
-              type="submit" 
-              disabled={submitting}
-              style={{ padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px' }}
-            >
-              {submitting ? 'Envoi...' : 'Envoyer'}
-            </button>
-          </form>
-        </div>
+        {localStorage.getItem('token') ? (
+          <div className="add-review-form" style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}>
+            <h4>Laisser une note</h4>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <form onSubmit={handleReviewSubmit}>
+              <div style={{ marginBottom: '10px' }}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>Pseudo :</label>
+                <input
+                  type="text"
+                  required
+                  value={newReview.pseudo}
+                  onChange={(e) => setNewReview({ ...newReview, pseudo: e.target.value })}
+                  style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                />
+              </div>
+              <div style={{ marginBottom: '10px' }}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>Note :</label>
+                {renderInteractiveStars()}
+              </div>
+              <button 
+                type="submit" 
+                disabled={submitting}
+                style={{ padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px' }}
+              >
+                {submitting ? 'Envoi...' : 'Envoyer'}
+              </button>
+            </form>
+          </div>
+        ) : (
+          <div style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px', textAlign: 'center' }}>
+            <p>Vous devez être connecté pour laisser une note.</p>
+            <Link to="/login" style={{ display: 'inline-block', padding: '10px 20px', backgroundColor: '#3498db', color: 'white', textDecoration: 'none', borderRadius: '4px' }}>
+              Se connecter
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
