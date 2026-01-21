@@ -143,6 +143,14 @@ function Blog() {
           )}
         </div>
       )}
+        {/* Community Section */}
+        <section className="community-section">
+            <h2 className="section-title">Rejoignez le mouvement</h2>
+            <p className="section-text">
+                Soul N Leaf, c'est plus qu'une marque, c'est une communauté engagée.
+                Suivez-nous pour ne rien rater de nos prochains pop-up stores et de nos futures collaborations artistiques.
+            </p>
+        </section>
     </div>
   );
 }

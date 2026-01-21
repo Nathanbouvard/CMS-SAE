@@ -73,9 +73,99 @@ body {
 
 /* Layout */
 .page-container {
-  padding: 7rem 2rem;
+  padding: 7rem 2rem 2rem; /* Adjusted padding-bottom */
   max-width: 1500px;
   margin: 0 auto;
+}
+
+/* Hero Section */
+.hero-section {
+  text-align: center;
+  margin-bottom: 4rem;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.hero-title {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.brand-highlight {
+  color: #082c03;
+  position: relative;
+  display: inline-block;
+}
+
+.brand-highlight::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 8px;
+  bottom: 5px;
+  left: 0;
+  background-color: #A7CC72;
+  opacity: 0.3;
+  z-index: -1;
+}
+
+.hero-tagline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.tagline-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.tagline-item:hover {
+  transform: translateY(-5px);
+}
+
+.tagline-word {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  letter-spacing: -1px;
+}
+
+.tagline-word.create { color: #185720; }
+.tagline-word.customize { color: #58429b; }
+.tagline-word.wear { color: #fc9245; }
+
+.tagline-desc {
+  font-size: 1rem;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.tagline-separator {
+  font-size: 2rem;
+  color: #ccc;
+  font-weight: 300;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Blog */
@@ -178,7 +268,7 @@ body {
 .block {
     margin-bottom: 20px;
 }
-white
+
 /* Form */
 .login-form {
   background-color: white;
@@ -220,15 +310,106 @@ white
   margin-top: 10px;
 }
 
-/* Home hover effect pour les texte Impactant*/
-.home-strong {
-  display: inline-block;
-  transition: all 0.4s ease;
-  cursor: default;
-  margin: 0 25px;
+/* New Home Sections */
+
+.home-section {
+  margin-top: 6rem;
+  padding: 4rem 2rem;
+  border-radius: 12px;
 }
 
-.home-strong:hover {
-  transform: scale(1.25);
-  filter: brightness(1.2);
+.home-section.concept {
+  background-color: #f0f7ef;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  color: #082c03;
+  margin-bottom: 1.5rem;
+}
+
+.section-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #444;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.student-badge {
+  display: inline-block;
+  background-color: #A7CC72;
+  color: #082c03;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Features Grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.feature-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+  border-top: 4px solid #A7CC72;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.feature-title {
+  font-size: 1.5rem;
+  color: #082c03;
+  margin-bottom: 1rem;
+}
+
+.feature-desc {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Product Intro */
+.products-intro {
+  text-align: center;
+  margin: 6rem auto;
+  max-width: 800px;
+}
+
+/* Community / Footer Callout */
+.community-section {
+  background-color: #082c03;
+  color: white;
+  text-align: center;
+  margin-top: 6rem;
+  padding: 5rem 2rem;
+  border-radius: 12px;
+}
+
+.community-section .section-title {
+  color: white;
+}
+
+.community-section .section-text {
+  color: #e0e0e0;
 }
