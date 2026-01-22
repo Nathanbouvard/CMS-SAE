@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import VizBlock from '../components/VizBlock';
+import './ArticleDetail.css';
 
 function ArticleDetail() {
   const { id } = useParams();
@@ -74,18 +75,12 @@ function ArticleDetail() {
 
   const isImage = (filename) => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(filename);
 
-  const getImageStyle = (size) => {
-    let maxWidth = '60%'; // medium par défaut
-    if (size === 'small') maxWidth = '30%';
-    if (size === 'large') maxWidth = '100%';
-    
-    return { 
-      maxWidth, 
-      'block-size': 'auto', 
-      borderRadius: '8px',
-      margin: '0 auto', // Centrer l'image
-      display: 'block'
-    };
+  const getImageClass = (size) => {
+    switch(size) {
+      case 'small': return 'article-image small';
+      case 'large': return 'article-image large';
+      default: return 'article-image medium';
+    }
   };
 
   if (loading) return <div className="page-container"><p>Chargement...</p></div>;
@@ -104,7 +99,7 @@ function ArticleDetail() {
   // Helper pour les étoiles interactives
   const renderInteractiveStars = () => {
     return (
-      <div style={{ display: 'flex', cursor: 'pointer' }}>
+      <div className="stars-selector">
         {[1, 2, 3, 4, 5].map((star) => (
           <svg
             key={star}
@@ -114,7 +109,7 @@ function ArticleDetail() {
             fill={star <= newReview.rating ? '#f39c12' : '#ccc'}
             width="24px"
             height="24px"
-            style={{ marginRight: '5px' }}
+            className="star-icon"
           >
             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
           </svg>
@@ -138,24 +133,13 @@ function ArticleDetail() {
                 {block.type === 'title' && block.content && <h2 style={titleStyle}>{block.content}</h2>}
                 {block.type === 'chart' && <VizBlock block={block} theme={article.theme} />}
 
-                {block.media && block.media.filename && block.type !== 'chart' && (
-                    <div className="block-media" style={{ marginTop: '15px', textAlign: 'center' }}>
-                        {isImage(block.media.filename) ? (
-                            <img 
-                                src={`/uploads/media/${block.media.filename}`}
-                                alt={block.media.altText || ''}
-                                style={getImageStyle(article.theme?.imageSize)}
-                            />
-                        ) : (
-                            <a 
-                                href={`/uploads/media/${block.media.filename}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                style={{ display: 'inline-block', padding: '10px 15px', backgroundColor: '#444', color: 'white', textDecoration: 'none', borderRadius: '4px' }}
-                            >
-                                📄 Voir le fichier : {block.media.filename}
-                            </a>
-                        )}
+                {block.media && block.media.filename && block.type !== 'chart' && isImage(block.media.filename) && (
+                    <div className="block-media">
+                        <img 
+                            src={`/uploads/media/${block.media.filename}`}
+                            alt={block.media.altText || ''}
+                            className={getImageClass(article.theme?.imageSize)}
+                        />
                     </div>
                 )}
             </div>
@@ -170,17 +154,17 @@ function ArticleDetail() {
         </div>
       )}
 
-      <div className="article-reviews" style={{ marginTop: '40px', borderTop: '1px solid #ccc', paddingTop: '20px' }}>
+      <div className="article-reviews">
         <h3>Note moyenne</h3>
 
         {/* Affichage de la moyenne */}
         {article.ratings && article.ratings.length > 0 ? (
-          <div className="average-rating" style={{ marginBottom: '30px', textAlign: 'center' }}>
-            <span style={{ fontSize: '3em', fontWeight: 'bold', color: '#f39c12' }}>
+          <div className="average-rating">
+            <span className="rating-score">
               {(article.ratings.reduce((acc, r) => acc + (r.rating || 0), 0) / article.ratings.length).toFixed(1)}
             </span>
-            <span style={{ fontSize: '1.5em', color: '#ccc' }}> / 5</span>
-            <div style={{ color: '#f39c12', fontSize: '1.5em' }}>
+            <span className="rating-max"> / 5</span>
+            <div className="rating-stars-static">
               {'★'.repeat(Math.round(article.ratings.reduce((acc, r) => acc + (r.rating || 0), 0) / article.ratings.length))}
               {'☆'.repeat(5 - Math.round(article.ratings.reduce((acc, r) => acc + (r.rating || 0), 0) / article.ratings.length))}
             </div>
@@ -192,37 +176,37 @@ function ArticleDetail() {
 
         {/* Formulaire d'ajout d'avis */}
         {localStorage.getItem('token') ? (
-          <div className="add-review-form" style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}>
+          <div className="add-review-form">
             <h4>Laisser une note</h4>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <form onSubmit={handleReviewSubmit}>
-              <div style={{ marginBottom: '10px' }}>
-                <label style={{ display: 'block', marginBottom: '5px' }}>Pseudo :</label>
+              <div className="form-group">
+                <label className="form-label">Pseudo :</label>
                 <input
                   type="text"
                   required
                   value={newReview.pseudo}
                   onChange={(e) => setNewReview({ ...newReview, pseudo: e.target.value })}
-                  style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                  className="form-input"
                 />
               </div>
-              <div style={{ marginBottom: '10px' }}>
-                <label style={{ display: 'block', marginBottom: '5px' }}>Note :</label>
+              <div className="form-group">
+                <label className="form-label">Note :</label>
                 {renderInteractiveStars()}
               </div>
               <button 
                 type="submit" 
                 disabled={submitting}
-                style={{ padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px' }}
+                className="submit-btn"
               >
                 {submitting ? 'Envoi...' : 'Envoyer'}
               </button>
             </form>
           </div>
         ) : (
-          <div style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px', textAlign: 'center' }}>
+          <div className="login-prompt">
             <p>Vous devez être connecté pour laisser une note.</p>
-            <Link to="/login" style={{ display: 'inline-block', padding: '10px 20px', backgroundColor: '#3498db', color: 'white', textDecoration: 'none', borderRadius: '4px' }}>
+            <Link to="/login" className="login-btn">
               Se connecter
             </Link>
           </div>

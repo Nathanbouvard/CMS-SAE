@@ -1,0 +1,144 @@
+.article-image {
+  block-size: auto;
+  border-radius: 8px;
+  margin: 0 auto;
+  display: block;
+}
+
+.article-image.small { max-width: 30%; }
+.article-image.medium { max-width: 60%; }
+.article-image.large { max-width: 100%; }
+
+.block-media {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.file-download-btn {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #444;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.file-download-btn:hover {
+  background-color: #333;
+}
+
+.article-reviews {
+  margin-top: 40px;
+  border-top: 1px solid #ccc;
+  padding-top: 20px;
+}
+
+.average-rating {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.rating-score {
+  font-size: 3em;
+  font-weight: bold;
+  color: #f39c12;
+}
+
+.rating-max {
+  font-size: 1.5em;
+  color: #ccc;
+}
+
+.rating-stars-static {
+  color: #f39c12;
+  font-size: 1.5em;
+}
+
+/* Formulaire d'ajout d'avis */
+.article-detail .add-review-form {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #A7CC72;
+  border-radius: 8px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Augmentation de la spécificité pour la barre de saisie (pseudo) */
+.article-detail .form-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 2px solid #A7CC72; /* Bordure verte */
+  background-color: #f0f7ef; /* Fond vert très clair */
+  color: #082c03; /* Texte vert foncé */
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.article-detail .form-input:focus {
+  outline: none;
+  border-color: #082c03;
+  box-shadow: 0 0 5px rgba(167, 204, 114, 0.5);
+}
+
+.stars-selector {
+  display: flex;
+  cursor: pointer;
+}
+
+.star-icon {
+  margin-right: 5px;
+}
+
+/* Bouton d'envoi vert */
+.article-detail .submit-btn {
+  padding: 10px 20px;
+  background-color: #A7CC72; /* Vert */
+  color: #082c03; /* Texte foncé */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.article-detail .submit-btn:hover {
+  background-color: #8fb859;
+}
+
+.article-detail .submit-btn:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.login-prompt {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.login-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.login-btn:hover {
+  background-color: #2980b9;
+}
