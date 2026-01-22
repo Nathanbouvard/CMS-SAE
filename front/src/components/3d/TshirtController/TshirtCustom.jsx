@@ -2,13 +2,13 @@ import React, {useRef, useState, useEffect} from 'react'
 import {useGLTF, Decal} from '@react-three/drei'
 import * as THREE from 'three'
 
-// Preload textures to avoid white flash (optional but good for cache)
+
 const stickerPaths = [
     "/stickers/logo.svg",
     "/stickers/heart.svg",
     "/stickers/star.svg"
 ];
-// We can keep a simple preload via standard loader if we want, or rely on the effect below.
+
 const loader = new THREE.TextureLoader();
 stickerPaths.forEach(path => loader.load(path));
 
@@ -19,7 +19,6 @@ export default function TshirtCustom({customColor, sizeTshirt, stickFront, stick
     const [frontTexture, setFrontTexture] = useState(null);
     const [backTexture, setBackTexture] = useState(null);
 
-    // Seamless loading for Front Texture
     useEffect(() => {
         new THREE.TextureLoader().load(stickFront, (tex) => {
             tex.anisotropy = 16;
@@ -30,7 +29,6 @@ export default function TshirtCustom({customColor, sizeTshirt, stickFront, stick
         });
     }, [stickFront]);
 
-    // Seamless loading for Back Texture
     useEffect(() => {
         new THREE.TextureLoader().load(stickBack, (tex) => {
             tex.anisotropy = 16;
@@ -70,7 +68,7 @@ export default function TshirtCustom({customColor, sizeTshirt, stickFront, stick
             {/*Logo dans le dos*/}
             {backTexture && (
                 <Decal
-                    // debug // Makes "bounding box" of the decal visible
+                    debug // Makes "bounding box" of the decal visible
                     position={[0, 0.29, -0.12]} // Position of the decal
                     rotation={[0, Math.PI / 1, 0]} // Rotation of the decal (can be a vector or a degree in radians)
                     scale={0.15} // Scale of the decal
