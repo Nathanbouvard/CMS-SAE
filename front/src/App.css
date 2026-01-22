@@ -116,6 +116,10 @@ body {
     background-color: #f0f7ef;
     color: #082c03;
   }
+
+  .scene-container {
+    display: none;
+  }
 }
 
 .btn-login {

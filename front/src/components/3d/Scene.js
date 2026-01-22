@@ -19,7 +19,7 @@ export default function Scene() {
     const [controlsEnabled] = useState(true)
 
     return (
-        <div style={{position: 'relative', width: '100%', height: '80vh'}}>
+        <div className="scene-container" style={{position: 'relative', width: '100%', height: '80vh'}}>
             <RightMenu 
                 setColor={setColor} 
                 setSize={setSize} 
