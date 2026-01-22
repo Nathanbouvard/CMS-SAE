@@ -1,11 +1,12 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Blog from './pages/Blog';
-import ArticleDetail from './pages/ArticleDetail';
-import Login from './pages/Login';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Blog from "./pages/Blog";
+import ArticleDetail from "./pages/ArticleDetail";
+import Login from "./pages/Login";
+import Boutique from "./pages/Boutique";
+import "./App.css";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<ArticleDetail />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/boutique" element={<Boutique />} />
         </Routes>
       </div>
     </Router>
