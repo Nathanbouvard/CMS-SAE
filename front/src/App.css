@@ -41,27 +41,69 @@ body {
   color: #082c03;
 }
 
+.mobile-menu-icon {
+  display: none;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.nav-toggle {
+  display: none;
+}
+
 .navbar-nav {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
-  align-items: center;
 }
 
 .navbar-nav li {
   margin-left: 20px;
 }
 
-.navbar-nav a {
-  text-decoration: none;
-  color: black;
-  font-weight: 500;
-  transition: color 0.3s;
-}
+@media (max-width: 768px) {
+  .mobile-menu-icon {
+    display: block;
+    padding: 0.5rem;
+  }
 
-.navbar-nav a:hover {
-  color: #082c03;
+  .navbar-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    flex-direction: column;
+    padding: 1rem 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+
+  /* Affiche le menu burger si la case est coché */
+  #nav-toggle:checked ~ .navbar-nav {
+    display: flex;
+  }
+
+  .navbar-nav li {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .navbar-nav a {
+    display: block;
+    padding: 1rem;
+    color: #333;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #f9f9f9;
+  }
+
+  .navbar-nav a:hover {
+    background-color: #f0f7ef; /* Feedback visuel au survol */
+    color: #082c03;
+  }
 }
 
 .btn-login {
