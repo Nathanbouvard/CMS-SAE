@@ -41,6 +41,16 @@ body {
   color: #082c03;
 }
 
+.mobile-menu-icon {
+  display: none;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.nav-toggle {
+  display: none;
+}
+
 .navbar-nav {
   display: flex;
   list-style: none;
@@ -64,6 +74,50 @@ body {
   color: #082c03;
 }
 
+@media (max-width: 768px) {
+  .mobile-menu-icon {
+    display: block;
+    padding: 0.5rem;
+  }
+
+  .navbar-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    flex-direction: column;
+    padding: 1rem 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+
+  /* Affiche le menu burger si la case est coché */
+  #nav-toggle:checked ~ .navbar-nav {
+    display: flex;
+  }
+
+  .navbar-nav li {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .navbar-nav a {
+    display: block;
+    padding: 1rem;
+    color: #333;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #f9f9f9;
+  }
+
+  .navbar-nav a:hover {
+    background-color: #f0f7ef;
+    color: #082c03;
+  }
+}
+
 .btn-login {
   background-color: #A7CC72;
   color: #000 !important;
@@ -73,7 +127,7 @@ body {
 
 /* Layout */
 .page-container {
-  padding: 7rem 2rem 2rem; /* Adjusted padding-bottom */
+  padding: 7rem 2rem 2rem;
   max-width: 1500px;
   margin: 0 auto;
 }
