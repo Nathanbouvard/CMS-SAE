@@ -7,7 +7,6 @@ function Blog() {
 
   const isImage = (filename) => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(filename);
 
-  // Helper to render star ratings
   const renderStars = (rating) => {
     const rounded = Math.round(rating);
     return (
@@ -39,7 +38,6 @@ function Blog() {
                 articles = data;
             }
 
-            // L'API de liste ne renvoie pas forcément les blocks ni les ratings. On récupère les détails pour chaque article.
             const detailedArticles = await Promise.all(articles.map(async (article) => {
                 try {
                     const articleId = article.id || (article['@id'] ? article['@id'].split('/').pop() : null);
