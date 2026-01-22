@@ -129,7 +129,8 @@ function ArticleDetail() {
         {article.blocks?.map((block, idx) => (
             <div key={block.id || idx} className={`block block-${block.type}`}>
                 
-                {block.type === 'text' && block.content && <div dangerouslySetInnerHTML={{ __html: block.content.replace(/\n/g, '<br />') }} />}
+                {block.type === 'text' && block.content &&
+                 <div dangerouslySetInnerHTML={{ __html: block.content.replace(/\n/g, '<br />') }} />}
                 {block.type === 'title' && block.content && <h2 style={titleStyle}>{block.content}</h2>}
                 {block.type === 'chart' && <VizBlock block={block} theme={article.theme} />}
 
